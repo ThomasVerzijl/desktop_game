@@ -12,7 +12,8 @@
       {
         "title": "desktopgame",
         "width": 300,
-        "height": 600
+        "height": 600,
+        "decorations": false
       }
     ],
     "security": {
