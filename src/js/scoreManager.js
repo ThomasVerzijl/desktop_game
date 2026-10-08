@@ -1,41 +1,55 @@
-import { updateUI } from '../main.js'
-export const resources = {
-    wood: 0,
-    ores: 0,
-    food: 0
-};
-let productionRates = {
-    wood: 1,  // Voegt 5 hout per seconde toe
-    ores: 2,
-    food: 0.5
-};
-let lastUpdate = Date.now();
+const workers = [];
 
-const productionPerSecond = 5;
+let maxLevel = 10;
+let luckLevel = 1;
 
-setInterval(() => {
-    const now = Date.now();
-    const deltaTime = (now - lastUpdate) / 1000;
-    lastUpdate = now;
+const maxLuckLevel = 5;
+const baseRarity = 4;
+const maxLuckEffect = 0.5;
 
 
 
-    Object.keys(resources).forEach(resource => {
-        const gained = productionRates[resource] * deltaTime;
-        addResource(resource, gained);
+function randomSkill() {
+    const random = Math.random();
 
-    });
+    const luckEffect =
+        ((luckLevel - 1) / (maxLuckLevel - 1)) * maxLuckEffect;
+
+    const rarity = baseRarity * (1 - luckEffect);
+
+    const percentage = random ** rarity;
+
+    const skill = Math.floor(percentage * maxLevel) + 1;
+
+    return Math.min(skill, maxLevel);
+}
 
 
-}, 100);
 
-export function addResource(type, amount) {
-    if (type in resources) {
-        resources[type] += amount
-        console.log("added " + type + " +" + amount + " to your resources")
-        updateUI()
-    }
-    else {
-        console.log("the item is not in the resources" + type)
-    }
+function createWorker(id) {
+    return {
+        id: id,
+        name: `Worker ${id}`,
+
+        skills: {
+            wood: randomSkill(),
+            ores: randomSkill(),
+            food: randomSkill()
+        },
+
+        assignedJob: null
+    };
+}
+
+
+
+
+export function hireWorker() {
+    const id = workers.length + 1;
+
+    const worker = createWorker(id);
+
+    workers.push(worker);
+
+    console.table(workers);
 }
