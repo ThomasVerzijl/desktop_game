@@ -1,18 +1,17 @@
 const workers = [];
 
-let maxLevel = 100; // Pas dit aan naar 100, 150, 200, etc.
+let maxLevel = 10000; // Pas dit aan naar 100, 150, 200, etc.
 
 const container = document.querySelector('.workers-container');
 
 // RANDOM SKILL FORMULE (Schaalt zeldzaamheid direct met maxLevel)
 function randomSkill() {
     // Verhoog de basis naar 6.0 om waarden boven 50/70/90 veel zeldzamer te maken
-    const baseExponent = 6.0;
-    const exponent = baseExponent * (maxLevel / 100);
+    const rarity = 4;
 
-    const roll = Math.pow(Math.random(), exponent);
+    const roll = Math.pow(Math.random(), rarity);
 
-    return Math.min(Math.floor(roll * maxLevel) + 1, maxLevel);
+    return Math.floor(roll * maxLevel) + 1;
 }
 
 // CREATE WORKER
