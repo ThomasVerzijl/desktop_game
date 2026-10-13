@@ -1,12 +1,12 @@
 const workers = [];
 
-let maxLevel = 10000; // Pas dit aan naar 100, 150, 200, etc.
+let maxLevel = 10;
 
 const container = document.querySelector('.workers-container');
 
-// RANDOM SKILL FORMULE (Schaalt zeldzaamheid direct met maxLevel)
+
 function randomSkill() {
-    // Verhoog de basis naar 6.0 om waarden boven 50/70/90 veel zeldzamer te maken
+
     const rarity = 4;
 
     const roll = Math.pow(Math.random(), rarity);
@@ -34,18 +34,48 @@ export function hireWorker() {
     const worker = createWorker(id);
     workers.push(worker);
 
-    const workerDiv = document.createElement("div");
-    workerDiv.textContent =
+    const workerCard = document.createElement("div");
+    workerCard.className = "worker-card";
+
+    // Stats Display
+    const statsText = document.createElement("p");
+    statsText.textContent =
         `${worker.name} | ` +
         `Wood: ${worker.skills.wood} | ` +
         `Food: ${worker.skills.food} | ` +
         `Ores: ${worker.skills.ores}`;
+    workerCard.appendChild(statsText);
 
-    container.appendChild(workerDiv);
+
+    const statusText = document.createElement("p");
+    statusText.textContent = "Assigned Job: None";
+    workerCard.appendChild(statusText);
+
+    const jobs = ["wood", "food", "ores"];
+
+    jobs.forEach(job => {
+        const btn = document.createElement("button");
+        btn.textContent = `Assign ${job.toUpperCase()}`;
+
+
+        btn.addEventListener("click", () => {
+
+            worker.assignedJob = job;
+
+            statusText.textContent = `Assigned Job: ${job.toUpperCase()}`;
+
+            console.log(`${worker.name} is now working on ${job}`);
+        });
+
+        workerCard.appendChild(btn);
+    });
+
+    container.appendChild(workerCard);
 
     return worker;
 }
 
 export function getWorkers() {
+
     return workers;
 }

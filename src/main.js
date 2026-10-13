@@ -1,4 +1,4 @@
-import { addResource, resources } from './js/scoreManager.js';
+import { addResource, resources, gameTick } from './js/scoreManager.js';
 import { hireWorker } from './js/hireManager.js';
 import './js/quitgame.js';
 
@@ -25,3 +25,16 @@ document.querySelectorAll('.harvest-btn').forEach(button => {
 document.querySelector('.hire-btn').addEventListener('click', () => {
   hireWorker();
 });
+
+let lastUpdate = Date.now();
+
+setInterval(() => {
+  const now = Date.now();
+  const deltaTime = (now - lastUpdate) / 1000;
+  lastUpdate = now;
+
+  gameTick(deltaTime);
+  updateUI();
+}, 100);
+
+updateUI();
